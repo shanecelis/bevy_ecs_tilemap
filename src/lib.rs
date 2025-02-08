@@ -56,6 +56,7 @@ pub mod map;
 pub(crate) mod render;
 /// A module which contains tile components.
 pub mod tiles;
+pub mod populate;
 
 /// A bevy tilemap plugin. This must be included in order for everything to be rendered.
 /// But is not necessary if you are running without a renderer.

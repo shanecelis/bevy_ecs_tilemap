@@ -5,10 +5,11 @@ use crate::prelude::HexCoordSystem;
 use crate::tiles::{TileBundle, TileColor, TilePos, TileTextureIndex};
 use crate::{TileStorage, TilemapSize};
 use bevy::hierarchy::BuildChildren;
-use bevy::prelude::{ChildBuild, Color, Commands};
+use bevy::prelude::{ChildBuild, Color, Commands, Bundle};
 
-/// Fills an entire tile storage with the given tile.
-pub fn fill_tilemap(
+/// Fills an entire tile storage with the given tile including a bundle of components.
+pub fn fill_tilemap_with(
+    bundle: impl Bundle + Clone,
     texture_index: TileTextureIndex,
     size: TilemapSize,
     tilemap_id: TilemapId,
@@ -26,6 +27,7 @@ pub fn fill_tilemap(
                         texture_index,
                         ..Default::default()
                     })
+                    .insert(bundle.clone())
                     .id();
                 tile_storage.set(&tile_pos, tile_entity);
             }
@@ -33,6 +35,16 @@ pub fn fill_tilemap(
     });
 }
 
+/// Fills an entire tile storage with the given tile.
+pub fn fill_tilemap(
+    texture_index: TileTextureIndex,
+    size: TilemapSize,
+    tilemap_id: TilemapId,
+    commands: &mut Commands,
+    tile_storage: &mut TileStorage,
+) {
+    fill_tilemap_with((), texture_index, size, tilemap_id, commands, tile_storage);
+}
 /// Fills a rectangular region with the given tile.
 ///
 /// The rectangular region is defined by an `origin` in [`TilePos`], and a
